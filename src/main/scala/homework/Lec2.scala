@@ -1,6 +1,6 @@
 package homework
 
-import homework.Lec2.{defineNumber, evenOrOdd, fibonnacсi}
+import homework.Lec2.{defineNumber, evenOrOdd, fibonacciTailRecurcive, fibonnacсi}
 import util.ImplicitForPrint
 import util.UtilF.writeNumberOfTask
 
@@ -29,6 +29,16 @@ object Lec2 {
     }
   }
 
+  def fibonacciTailRecurcive(num: Int): Int = {
+    def fibHelper(num: Int, acc1: Int, acc2: Int): Int = num match {
+      case 0 => acc1
+      case 1 => acc2
+      case _ => fibHelper(num - 1, acc2, acc1 + acc2)
+    }
+
+    fibHelper(num, 0, 1)
+  }
+
 }
 
 object Main2 extends App with ImplicitForPrint {
@@ -50,5 +60,6 @@ object Main2 extends App with ImplicitForPrint {
   l3.print
 
   writeNumberOfTask(5)
-  val l4 = for (i <- 0 to 10) fibonnacсi(i).print
+  for (i <- 1 to 10) fibonnacсi(i).print
+  for (i <- 1 to 10) fibonacciTailRecurcive(i).print
 }

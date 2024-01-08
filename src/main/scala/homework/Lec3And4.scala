@@ -1,5 +1,6 @@
 package homework
 
+import homework.Lec3And4.{divideEither, divideOpt, divideTry}
 import util.ImplicitForPrint
 
 import scala.util.Try
@@ -48,22 +49,28 @@ object Lec3And4 {
 
   def isContainStr(opt: Option[String], str: String): Unit = opt match {
     case Some(src) => if (src == str) println("Word found") else println("Word not found")
-    case _ => println("Source is null")
+    case None => println("Source is null")
   }
 
-  def howOldAreYou(opt: Option[Int]): Unit = {
-    opt.foreach {
-      case age if age > 18 => println("adult")
-      case age if 10 < age && age <= 18 => println("teenager")
-      case age if age <= 10 && age > 0 => println("child")
-      case _ => println("god")
-    }
+  def howOldAreYou(opt: Option[Int]): Unit = opt.foreach {
+    case age if age > 18 => println("adult")
+    case age if 10 < age && age <= 18 => println("teenager")
+    case age if age <= 10 && age > 0 => println("child")
+    case _ => println("god")
+  }
+
+  def divideOpt(a: Int, b: Int): Option[Int] = b match {
+    case 0 => None
+    case b if b != 0 => Option(a/b)
   }
 
   def divideTry(a: Int, b: Int): Try[Int] = Try {
     a / b
   }
 
+  def divideEither(a: Int, b: Int): Either[String, Int] =
+    if (b != 0) Right(a/b)
+    else Left("divide by zero with either")
 }
 
 object Main3And4 extends App with ImplicitForPrint {
@@ -81,4 +88,15 @@ object Main3And4 extends App with ImplicitForPrint {
   Lec3And4.isContainStr(Option(null), "test2")
 
   List(11, 20, 1, -10).foreach(age => Lec3And4.howOldAreYou(Option(age)))
+
+  divideOpt(10, 2).print
+  divideOpt(10, 0).print
+
+  divideTry(10, 2).getOrElse(0).print
+  divideTry(10, 0).recover(_ => "divide by zero with try").foreach(_.print)
+
+  divideEither(10, 0) match {
+    case Left(er) => er.print
+    case Right(value) => value.print
+  }
 }

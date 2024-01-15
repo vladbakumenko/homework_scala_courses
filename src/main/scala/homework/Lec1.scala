@@ -33,7 +33,7 @@ object Lec1 {
   }
 }
 
-object Main extends App with ImplicitForPrint {
+object Main1 extends App with ImplicitForPrint {
 
   writeNumberOfTask(1)
   List(2, 4, 8).foreach(x => (s"square of number $x is ${square(x)}").print)

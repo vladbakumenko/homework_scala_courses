@@ -1,10 +1,9 @@
 package homework
 
-import homework.Lec5.DaysByEnum.Friday
-import homework.Lec5.DaysByEnum.Sunday
-import homework.Lec5.DaysByEnum.Wednesday
-import homework.Lec5.DaysByEnum.getDaysBetween
-import homework.Lec5.DaysByEnum.getNextDay
+import com.sun.tools.javac.util.Assert
+import homework.Lec5.DaysByEnum.{Friday, Monday, Sunday, Wednesday, getDaysBetween, getNextDay}
+import homework.Lec5.{DaysBySealed, getUniqElems}
+import homework.Lec5.DaysBySealed.{Monday, Tuesday}
 import util.UtilF.writeNumberOfTask
 
 object Lec5 extends {
@@ -27,18 +26,31 @@ object Lec5 extends {
   }
 
   object DaysBySealed {
-    sealed trait Days {
-      val index: Int
-    }
+    sealed trait DayOfTheWeek
 
-    case class Monday(index: Int)    extends Days
-    case class Tuesday(index: Int)   extends Days
-    case class Wednesday(index: Int) extends Days
-    case class Thursday(index: Int)  extends Days
-    case class Friday(index: Int)    extends Days
-    case class Saturday(index: Int)  extends Days
-    case class Sunday(index: Int)    extends Days
+    case class Monday()    extends DayOfTheWeek
+    case class Tuesday()   extends DayOfTheWeek
+    case class Wednesday() extends DayOfTheWeek
+    case class Thursday()  extends DayOfTheWeek
+    case class Friday()    extends DayOfTheWeek
+    case class Saturday()  extends DayOfTheWeek
+    case class Sunday()    extends DayOfTheWeek
+
+    def getNextDay(currDay: DayOfTheWeek): DayOfTheWeek = {
+      currDay match {
+        case Monday()    => Tuesday()
+        case Tuesday()   => Wednesday()
+        case Wednesday() => Thursday()
+        case Thursday()  => Friday()
+        case Friday()    => Saturday()
+        case Saturday()  => Sunday()
+        case Sunday()    => Monday()
+      }
+    }
   }
+
+  def getUniqElems(seq: Seq[Any]) = seq.toSet
+
 
 }
 
@@ -49,6 +61,14 @@ object Main5 extends App {
 
   writeNumberOfTask(2)
   println(getNextDay(Sunday))
+  println(DaysBySealed.getNextDay(new Monday))
+
+  writeNumberOfTask(3)
+  val nums = Seq(1, 2, 2, 1, 3, 3, 4, 4, 5)
+  println(getUniqElems(nums))
+  val words = Seq("one", "one", "two", "three", "three")
+  println(getUniqElems(words))
+
 
 
 }

@@ -2,9 +2,11 @@ package homework
 
 import com.sun.tools.javac.util.Assert
 import homework.Lec5.DaysByEnum.{Friday, Monday, Sunday, Wednesday, getDaysBetween, getNextDay}
-import homework.Lec5.{DaysBySealed, getUniqElems}
+import homework.Lec5.{DaysBySealed, getAverageFromOptInt, getUniqElems}
 import homework.Lec5.DaysBySealed.{Monday, Tuesday}
 import util.UtilF.writeNumberOfTask
+
+import java.math.MathContext
 
 object Lec5 extends {
 
@@ -51,7 +53,21 @@ object Lec5 extends {
 
   def getUniqElems(seq: Seq[Any]) = seq.toSet
 
+  def getAverageFromOptInt(seq: Seq[Option[Int]]): Double = {
+    val withoutOpt = for {
+      opt <- seq
+      x <- opt
+    } yield x
 
+    val sum = withoutOpt.sum
+    val length = withoutOpt.length
+
+    BigDecimal.decimal(sum.toDouble / length).round(new MathContext(3)).toDouble
+  }
+
+  def getSumOfOtyIntOrReturnNone(seq: Seq[Option[Int]]) = {
+
+  }
 }
 
 object Main5 extends App {
@@ -69,6 +85,11 @@ object Main5 extends App {
   val words = Seq("one", "one", "two", "three", "three")
   println(getUniqElems(words))
 
+  writeNumberOfTask(4)
+  val optNums = nums.map(Option(_)) ++ Seq(Option.empty[Int])
+  println(getAverageFromOptInt(optNums))
+
+  writeNumberOfTask(5)
 
 
 }

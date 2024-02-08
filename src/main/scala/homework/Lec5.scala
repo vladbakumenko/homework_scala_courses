@@ -2,11 +2,12 @@ package homework
 
 import com.sun.tools.javac.util.Assert
 import homework.Lec5.DaysByEnum.{Friday, Monday, Sunday, Wednesday, getDaysBetween, getNextDay}
-import homework.Lec5.{DaysBySealed, getAverageFromOptInt, getUniqElems}
+import homework.Lec5.{DaysBySealed, getAverageFromOptInt, getSumOfOptIntOrReturnNone, getUniqElems}
 import homework.Lec5.DaysBySealed.{Monday, Tuesday}
 import util.UtilF.writeNumberOfTask
 
 import java.math.MathContext
+import scala.util.Try
 
 object Lec5 extends {
 
@@ -22,7 +23,7 @@ object Lec5 extends {
     def getNextDay(day: Day): Day = {
       day.id match {
         case id: Int if id == (DaysByEnum.values.size - 1) => DaysByEnum(0)
-        case id: Int                                       => DaysByEnum(id + 1)
+        case id: Int => DaysByEnum(id + 1)
       }
     }
   }
@@ -30,23 +31,29 @@ object Lec5 extends {
   object DaysBySealed {
     sealed trait DayOfTheWeek
 
-    case class Monday()    extends DayOfTheWeek
-    case class Tuesday()   extends DayOfTheWeek
+    case class Monday() extends DayOfTheWeek
+
+    case class Tuesday() extends DayOfTheWeek
+
     case class Wednesday() extends DayOfTheWeek
-    case class Thursday()  extends DayOfTheWeek
-    case class Friday()    extends DayOfTheWeek
-    case class Saturday()  extends DayOfTheWeek
-    case class Sunday()    extends DayOfTheWeek
+
+    case class Thursday() extends DayOfTheWeek
+
+    case class Friday() extends DayOfTheWeek
+
+    case class Saturday() extends DayOfTheWeek
+
+    case class Sunday() extends DayOfTheWeek
 
     def getNextDay(currDay: DayOfTheWeek): DayOfTheWeek = {
       currDay match {
-        case Monday()    => Tuesday()
-        case Tuesday()   => Wednesday()
+        case Monday() => Tuesday()
+        case Tuesday() => Wednesday()
         case Wednesday() => Thursday()
-        case Thursday()  => Friday()
-        case Friday()    => Saturday()
-        case Saturday()  => Sunday()
-        case Sunday()    => Monday()
+        case Thursday() => Friday()
+        case Friday() => Saturday()
+        case Saturday() => Sunday()
+        case Sunday() => Monday()
       }
     }
   }
@@ -65,8 +72,16 @@ object Lec5 extends {
     BigDecimal.decimal(sum.toDouble / length).round(new MathContext(3)).toDouble
   }
 
-  def getSumOfOtyIntOrReturnNone(seq: Seq[Option[Int]]) = {
+  def getSumOfOptIntOrReturnNone(seq: Seq[Option[Int]]) = {
+    val withoutOpt = for {
+      opt <- seq
+      x <- opt
+    } yield x
 
+    withoutOpt.length == seq.length match {
+      case true => withoutOpt.sum
+      case false => None
+    }
   }
 }
 
@@ -90,6 +105,7 @@ object Main5 extends App {
   println(getAverageFromOptInt(optNums))
 
   writeNumberOfTask(5)
-
+  println(getSumOfOptIntOrReturnNone(optNums.filter(_.ne(None))))
+  println(getSumOfOptIntOrReturnNone(optNums))
 
 }

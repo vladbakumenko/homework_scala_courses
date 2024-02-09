@@ -1,9 +1,18 @@
 package homework
 
 import com.sun.tools.javac.util.Assert
-import homework.Lec5.DaysByEnum.{Friday, Monday, Sunday, Wednesday, getDaysBetween, getNextDay}
-import homework.Lec5.{DaysBySealed, getAverageFromOptInt, getSumOfOptIntOrReturnNone, getUniqElems}
-import homework.Lec5.DaysBySealed.{Monday, Tuesday}
+import homework.Lec5.DaysByEnum.Friday
+import homework.Lec5.DaysByEnum.Monday
+import homework.Lec5.DaysByEnum.Sunday
+import homework.Lec5.DaysByEnum.Wednesday
+import homework.Lec5.DaysByEnum.getDaysBetween
+import homework.Lec5.DaysByEnum.getNextDay
+import homework.Lec5.DaysBySealed
+import homework.Lec5.getAverageFromOptInt
+import homework.Lec5.getSumOfOptIntOrReturnNone
+import homework.Lec5.getUniqElems
+import homework.Lec5.DaysBySealed.Monday
+import homework.Lec5.DaysBySealed.Tuesday
 import util.UtilF.writeNumberOfTask
 
 import java.math.MathContext
@@ -23,7 +32,7 @@ object Lec5 extends {
     def getNextDay(day: Day): Day = {
       day.id match {
         case id: Int if id == (DaysByEnum.values.size - 1) => DaysByEnum(0)
-        case id: Int => DaysByEnum(id + 1)
+        case id: Int                                       => DaysByEnum(id + 1)
       }
     }
   }
@@ -47,13 +56,13 @@ object Lec5 extends {
 
     def getNextDay(currDay: DayOfTheWeek): DayOfTheWeek = {
       currDay match {
-        case Monday() => Tuesday()
-        case Tuesday() => Wednesday()
+        case Monday()    => Tuesday()
+        case Tuesday()   => Wednesday()
         case Wednesday() => Thursday()
-        case Thursday() => Friday()
-        case Friday() => Saturday()
-        case Saturday() => Sunday()
-        case Sunday() => Monday()
+        case Thursday()  => Friday()
+        case Friday()    => Saturday()
+        case Saturday()  => Sunday()
+        case Sunday()    => Monday()
       }
     }
   }
@@ -63,24 +72,20 @@ object Lec5 extends {
   def getAverageFromOptInt(seq: Seq[Option[Int]]): Double = {
     val withoutOpt = for {
       opt <- seq
-      x <- opt
+      x   <- opt
     } yield x
 
-    val sum = withoutOpt.sum
+    val sum    = withoutOpt.sum
     val length = withoutOpt.length
 
     BigDecimal.decimal(sum.toDouble / length).round(new MathContext(3)).toDouble
   }
 
   def getSumOfOptIntOrReturnNone(seq: Seq[Option[Int]]) = {
-    val withoutOpt = for {
-      opt <- seq
-      x <- opt
-    } yield x
-
-    withoutOpt.length == seq.length match {
-      case true => withoutOpt.sum
-      case false => None
+    if (!seq.forall(_.isDefined)) {
+      Option.empty
+    } else {
+      seq.flatten.sum
     }
   }
 }
@@ -107,5 +112,6 @@ object Main5 extends App {
   writeNumberOfTask(5)
   println(getSumOfOptIntOrReturnNone(optNums.filter(_.ne(None))))
   println(getSumOfOptIntOrReturnNone(optNums))
+
 
 }
